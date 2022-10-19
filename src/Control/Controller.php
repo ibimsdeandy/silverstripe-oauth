@@ -83,10 +83,10 @@ class Controller extends SilverStripeController
      * This takes parameters like the provider, scopes and callback url, builds an authentication
      * url with the provider's site and then redirects to it
      *
-     * @todo allow whitelisting of scopes (per provider)?
      * @param SS_HTTPRequest $request
      * @return SS_HTTPResponse
      * @throws SS_HTTPResponse_Exception
+     * @todo allow whitelisting of scopes (per provider)?
      */
     public function authenticate(SS_HTTPRequest $request)
     {
@@ -140,7 +140,7 @@ class Controller extends SilverStripeController
 
         try {
             $accessToken = $provider->getAccessToken('authorization_code', [
-                'code' => $request->getVar('code')
+                'code' => $request->getVar('code') ?? $request->postVar('code')
             ]);
 
             $handlers = $this->getHandlersForContext($session->inst_get('oauth2.context'));
@@ -222,12 +222,6 @@ class Controller extends SilverStripeController
         $state = $request->getVar('state') ?? $request->postVar('state');
         $session = $this->getSession();
         $data = $session->inst_get('oauth2');
-
-        if ($request->getVar('info')) {
-            echo $state . PHP_EOL;
-            var_dump($session);
-            var_dump($data);
-        }
 
         // If we're lacking any required data, or the session state doesn't match
         // the one the provider returned, the request is invalid
