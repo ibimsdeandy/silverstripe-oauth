@@ -219,7 +219,7 @@ class Controller extends SilverStripeController
      */
     public function validateState(SS_HTTPRequest $request)
     {
-        $state = $request->getVar('state');
+        $state = $request->getVar('state') ?? $request->postVar('state');
         $session = $this->getSession();
         $data = $session->inst_get('oauth2');
 
