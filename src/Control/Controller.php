@@ -223,6 +223,11 @@ class Controller extends SilverStripeController
         $session = $this->getSession();
         $data = $session->inst_get('oauth2');
 
+        if ($request->getVar('debug')) {
+            echo $state . PHP_EOL;
+            var_dump($session);
+        }
+
         // If we're lacking any required data, or the session state doesn't match
         // the one the provider returned, the request is invalid
         if (empty($data['state']) || empty($data['provider']) || empty($data['scope']) || $state !== $data['state']) {
