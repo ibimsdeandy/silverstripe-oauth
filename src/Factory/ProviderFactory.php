@@ -2,15 +2,22 @@
 
 namespace Bigfork\SilverStripeOAuth\Client\Factory;
 
+use Bigfork\SilverStripeOAuth\Client\Authenticator\Authenticator;
+use Config;
+use Controller;
+use Director;
+use Injector;
 use InvalidArgumentException;
-use League\OAuth2\Client\Provider\AbstractProvider;
 
 class ProviderFactory
 {
+    /**
+     * @var array
+     */
     protected $providers = [];
 
     /**
-     * @param array $providers
+     * @param array
      * @return self
      */
     public function setProviders(array $providers)
@@ -29,7 +36,7 @@ class ProviderFactory
 
     /**
      * @param string $name
-     * @return AbstractProvider
+     * @return League\OAuth2\Client\Provider\AbstractProvider
      */
     public function getProvider($name)
     {

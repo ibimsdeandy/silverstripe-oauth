@@ -25,8 +25,8 @@ Providers are registered as `Injector` services using SilverStripe’s YAML conf
 For example, to setup Facebook as a provider, first install the [Facebook OAuth2 package](https://github.com/thephpleague/oauth2-facebook), and then add the following to your YAML config:
 
 ```yml
-SilverStripe\Core\Injector\Injector:
-  Bigfork\SilverStripeOAuth\Client\Factory\ProviderFactory:
+Injector:
+  ProviderFactory:
     properties:
       providers:
         'Facebook': '%$FacebookProvider'
@@ -100,58 +100,3 @@ class ImportEventsHandler implements TokenHandler
 ```
 
 Throwing an exception from the `handleToken()` method will result in all other handlers being cancelled, the exception message being logged, and a "400 Bad Request" error page being shown to the user. The method can also return an instance of `SS_HTTPResponse` which will be output to the browser after all remaining handlers have been run.
-
-## Error handling
-
-Sometimes, OAuth providers may return errors that have been caused by the user. The most common example of this is when a user rejects granting the permissions you’ve requested. As each provider provides error messages in different ways, you’ll need to build your own error handling logic. Error handlers can be registered similarly to token handlers, for example:
-
-```yml
-Bigfork\SilverStripeOAuth\Client\Control\Controller:
-  error_handlers:
-    importeventserrorhandler:
-      priority: 1
-      context: 'import_events'
-      class: 'ImportEventsErrorHandler'
-```
-
-```php
-use Exception;
-use League\OAuth2\Client\Provider\AbstractProvider;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Security\Security;
-
-class ImportEventsErrorHandler implements ErrorHandler
-{
-    public function handleError(AbstractProvider $provider, HTTPRequest $request, Exception $exception)
-    {
-        if ($request->getVar('error_message')) {
-            return Security::permissionFailure(null, $request->getVar('error_message'));
-        }
-    }
-}
-```
-
-## Error logging
-
-By default, fatal OAuth errors will be logged to PHP’s error log. You can set up your own logging by overriding the `Psr\Log\LoggerInterface.oauth:` Injector service definition. For example, to log errors to an `oauth.log` file:
-
-```yml
----
-After: silverstripe-oauth-logging
----
-SilverStripe\Core\Injector\Injector:
-  Psr\Log\LoggerInterface.oauth:
-    calls: null # Reset - without this, the below "calls" would be merged in instead of replacing the original
----
-After: silverstripe-oauth-logging
----
-SilverStripe\Core\Injector\Injector:
-  Psr\Log\LoggerInterface.oauth:
-    calls:
-      pushDisplayErrorHandler: [ pushHandler, [ '%$OAuthLogFileHandler' ] ]
-  OAuthLogFileHandler:
-    class: Monolog\Handler\StreamHandler
-    constructor:
-       - '../oauth.log'
-       - 'error'
-```
