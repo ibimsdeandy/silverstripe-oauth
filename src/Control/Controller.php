@@ -229,9 +229,7 @@ class Controller extends SilverStripeController
         $session = $this->getSession();
         $data = $session->inst_get('oauth2');
 
-        // state 7321f223f9ff3b1577fbee02b32d17f3
-        // code c9eb2000364e74b0ab0ed22db35ea6e5e.0.msvx.6wNE72-5He5xBjY8COKe4g
-        if ($request->postVar('state') && $request->postVar('code') && empty($data['provider'])) {
+        if ($request->postVar('state') && $request->postVar('code')) {
             return 'isPost';
         }
 
