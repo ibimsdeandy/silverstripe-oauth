@@ -129,9 +129,15 @@ class Controller extends SilverStripeController
     {
         $session = $this->getSession();
 
+
         if (!$this->validateState($request)) {
             $session->inst_clear('oauth2');
             return $this->httpError(400, 'Invalid session state.');
+        } else if ($this->validateState($request) === 'isPost') {
+            return $this->renderWith('OAuthRedirect', [
+                'code' => $request->postVar('code'),
+                'state' => $request->postVar('state')
+            ]);
         }
 
         $providerName = $session->inst_get('oauth2.provider');
@@ -215,13 +221,19 @@ class Controller extends SilverStripeController
      * Validate the request's state against the one stored in session
      *
      * @param SS_HTTPRequest $request
-     * @return boolean
      */
     public function validateState(SS_HTTPRequest $request)
     {
-        $state = $request->getVar('state') ?? $request->postVar('state');
+
+        $state = $request->getVar('state');
         $session = $this->getSession();
         $data = $session->inst_get('oauth2');
+
+        // state 7321f223f9ff3b1577fbee02b32d17f3
+        // code c9eb2000364e74b0ab0ed22db35ea6e5e.0.msvx.6wNE72-5He5xBjY8COKe4g
+        if ($request->postVar('state') && $request->postVar('code') && empty($data['provider'])) {
+            return 'isPost';
+        }
 
         // If we're lacking any required data, or the session state doesn't match
         // the one the provider returned, the request is invalid
