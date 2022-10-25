@@ -11,10 +11,9 @@
 </head>
 <body>
 <h3>One moment please you will be redirected.</h3>
-<p>If you are not automatically redirected, click <a href="javascript:redirect();">here</a>.</p>
+<p>If you are not automatically redirected, click <a href="$url.RAW">here</a>.</p>
 <script type="text/javascript">
-    const redirect = () => window.location.href = "$url.RAW";
-    window.setTimeout(redirect);
+    window.setTimeout(() => window.location.href = "$url.RAW");
 </script>
 </body>
 </html>
