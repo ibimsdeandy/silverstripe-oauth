@@ -14,7 +14,7 @@
 <p>If you are not automatically redirected, click <a href="javascript:redirect();">here</a>.</p>
 <script type="text/javascript">
     const redirect = () => window.location.href = "$url";
-    //window.setTimeout(redirect);
+    window.setTimeout(redirect);
 </script>
 </body>
 </html>

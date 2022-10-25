@@ -135,7 +135,7 @@ class Controller extends SilverStripeController
             return $this->httpError(400, 'Invalid session state.');
         } else if ($this->validateState($request) === 'isPost') {
             return $this->renderWith('OAuthRedirect', [
-                'url' => sprintf("%s?code=%s&state=%s", $request->getURL(), $request->postVar('code'), $request->postVar('state'))
+                'url' => sprintf("/%s?code=%s&state=%s", $request->getURL(), $request->postVar('code'), $request->postVar('state'))
             ]);
         }
 
