@@ -13,7 +13,7 @@
 <h3>One moment please you will be redirected.</h3>
 <p>If you are not automatically redirected, click <a href="javascript:redirect();">here</a>.</p>
 <script type="text/javascript">
-    const redirect = () => window.location.href = "$url";
+    const redirect = () => window.location.href = "$url.RAW";
     window.setTimeout(redirect);
 </script>
 </body>
