@@ -22,14 +22,17 @@ class Controller extends SilverStripeController
         'callback'
     ];
 
+    private static $url_segment = 'oauth2';
+
     /**
-     * Copied from \Controler::redirectBack()
+     * Copied from \Controller::redirectBack()
      *
      * @param SS_HTTPRequest $request
      * @return string|null
      */
-    protected function findBackUrl(SS_HTTPRequest $request)
+    protected function findBackUrl(SS_HTTPRequest $request): ?string
     {
+        $backUrl = null;
         if ($request->requestVar('BackURL')) {
             $backUrl = $request->requestVar('BackURL');
         } elseif ($request->isAjax() && $request->getHeader('X-Backurl')) {
@@ -50,7 +53,7 @@ class Controller extends SilverStripeController
      *
      * @return string
      */
-    protected function getReturnUrl()
+    protected function getReturnUrl(): string
     {
         $backUrl = $this->getSession()->inst_get('oauth2.backurl');
         if (!$backUrl || !Director::is_site_url($backUrl)) {
@@ -63,9 +66,9 @@ class Controller extends SilverStripeController
     /**
      * @return string
      */
-    public function Link()
+    public function Link(): string
     {
-        return 'oauth/';
+        return $this->config()->get('url_segment');
     }
 
     /**

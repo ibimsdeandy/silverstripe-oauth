@@ -8,6 +8,7 @@ use Controller;
 use Director;
 use Injector;
 use InvalidArgumentException;
+use League\OAuth2\Client\Provider\AbstractProvider;
 
 class ProviderFactory
 {
@@ -36,7 +37,7 @@ class ProviderFactory
 
     /**
      * @param string $name
-     * @return League\OAuth2\Client\Provider\AbstractProvider
+     * @return AbstractProvider
      */
     public function getProvider($name)
     {
