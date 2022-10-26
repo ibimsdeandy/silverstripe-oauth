@@ -129,7 +129,6 @@ class Controller extends SilverStripeController
     {
         $session = $this->getSession();
 
-
         if (!$this->validateState($request)) {
             $session->inst_clear('oauth2');
             return $this->httpError(400, 'Invalid session state.');
@@ -145,7 +144,7 @@ class Controller extends SilverStripeController
 
         try {
             $accessToken = $provider->getAccessToken('authorization_code', [
-                'code' => $request->getVar('code') ?? $request->postVar('code')
+                'code' => $request->getVar('code')
             ]);
 
             $handlers = $this->getHandlersForContext($session->inst_get('oauth2.context'));
