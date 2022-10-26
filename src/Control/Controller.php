@@ -7,12 +7,9 @@ use Director;
 use Exception;
 use Injector;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Token\AccessToken;
-use Member;
-use OAuthAccessToken;
-use OAuthScope;
 use SS_HTTPRequest;
 use SS_HTTPResponse;
+use SS_HTTPResponse_Exception;
 use SS_Log;
 
 class Controller extends SilverStripeController
@@ -220,6 +217,7 @@ class Controller extends SilverStripeController
      * Validate the request's state against the one stored in session
      *
      * @param SS_HTTPRequest $request
+     * @return bool|string
      */
     public function validateState(SS_HTTPRequest $request)
     {
