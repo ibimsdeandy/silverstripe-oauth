@@ -129,6 +129,22 @@ class Controller extends SilverStripeController
     }
 
     /**
+     * Issue in SilverStripe Framework 5.1.12 will add a trailing slash to the redirect URL
+     * see: https://github.com/silverstripe/silverstripe-framework/issues/11151
+     * This method is a workaround for this issue
+     *
+     * @param string $url
+     * @param int $code
+     * @return HTTPResponse
+     */
+    public function redirect(string $url, int $code = 302): HTTPResponse
+    {
+        $response = new HTTPResponse();
+        return $response->redirect($url, $code);
+    }
+    
+
+    /**
      * The return endpoint after the user has authenticated with a provider
      *
      * @param HTTPRequest $request
